@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCRIT COLLEGE</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4; /* Background color */
+            color: #333; /* Text color */
+            line-height: 1.6;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        /* Heading styles */
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        /* Links styling */
+        a {
+            text-decoration: none;
+            color: #3498db; /* Link color */
+        }
+
+        a:hover {
+            color: #2980b9; /* Link color on hover */
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        td {
+            background-color: #ecf0f1;
+        }
+
+        /* List Styling */
+        ul, ol {
+            margin-left: 20px;
+        }
+
+        ul li {
+            list-style-type: square;
+        }
+
+        ol li {
+            list-style-type: decimal;
+        }
+
+        li:hover {
+            background-color: #f39c12; /* Hover effect for list items */
+        }
+
+        /* CSS3 Selectors */
+        #unique-element {
+            background-color: #e74c3c; /* Styling using ID selector */
+            padding: 20px;
+            color: white;
+        }
+
+        .class-element {
+            background-color: #1abc9c; /* Styling using class selector */
+            padding: 20px;
+            color: white;
+        }
+
+        /* Pseudo-classes */
+        button:hover {
+            background-color: #3498db; /* Button background change on hover */
+        }
+
+        button:focus {
+            outline: 3px solid #2980b9; /* Button focus outline */
+        }
+
+        /* Pseudo-elements */
+        p::first-letter {
+            font-size: 2em;
+            color: #e74c3c;
+        }
+
+        p::before {
+            content: "Note: ";
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            body {
+                background-color: #bdc3c7; /* Change background on smaller screens */
+            }
+
+            table {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+
+            ul li {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>FCRIT COLLEGE</h1>
+    </header>
+
+    <section>
+        <h2>Admissions:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>prajwal</td>
+                    <td>20</td>
+                    <td>Vashi</td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>25</td>
+                    <td>Thane</td>
+                </tr>
+                <tr>
+                    <td>Samuel Brown</td>
+                    <td>21</td>
+                    <td>Borivali</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>List of Departments</h2>
+        <ul>
+            <li>Information Technology</li>
+            <li>Computer</li>
+            <li>EXTC</li>
+            <li>Mechanical</li>
+            <li>Electrical</li>
+       
+
+    <section>
+        <h2>Styled Button</h2>
+        <button>Click Me</button>
+    </section>
+
+    <section>
+        <h2>Paragraph with Pseudo-Element</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis nisl ut velit facilisis.</p>
+    </section>
+
+    <section id="unique-element">
+        <h2>Styled Using ID Selector</h2>
+        <p>This section has a unique background color using an ID selector.</p>
+    </section>
+
+    <section class="class-element">
+        <h2>Styled Using Class Selector</h2>
+        <p>This section has a unique background color using a class selector.</p>
+    </section>
+
+</body>
+</html>
