@@ -1,0 +1,74 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Hall Ticket Styling */
+.hall-ticket {
+    width: 80%;
+    max-width: 700px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    color: #3498db;
+}
+
+header .subheading {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.student-details h2, .subject-details h2, .important-notes h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.student-details table,
+.subject-details ul,
+.important-notes ul {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.student-details td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.subject-details li,
+.important-notes li {
+    margin-bottom: 8px;
+}
+
+footer {
+    text-align: center;
+    font-size: 1em;
+    color: #777;
+    margin-top: 30px;
+}
+
+footer p {
+    font-size: 0.9em;
+}
