@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .bmi-result {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BMI Calculator</h1>
+
+  <div>
+    <label for="weight">Enter your Weight (kg): </label>
+    <input type="number" id="weight" placeholder="Enter weight in kg" /><br><br>
+    <label for="height">Enter your Height (m): </label>
+    <input type="number" id="height" step="0.01" placeholder="Enter height in meters" /><br><br>
+    <button id="calculateBMIBtn">Calculate BMI</button>
+  </div>
+
+  <div class="bmi-result">
+    <h3>Your BMI:</h3>
+    <p id="bmiResult">Please enter your weight and height and click "Calculate BMI".</p>
+    <p id="bmiCategory"></p>
+  </div>
+
+  <script>
+    // 1. Variables
+    let weight, height;  // Variables for weight and height
+
+    // 2. BMI Class
+    class BMI {
+      constructor(weight, height) {
+        this.weight = weight;
+        this.height = height;
+      }
+
+      // Method to calculate BMI
+      calculateBMI() {
+        return this.weight / (this.height * this.height);  // BMI formula
+      }
+
+      // Method to classify BMI
+      classifyBMI(bmi) {
+        if (bmi < 18.5) {
+          return "Underweight";
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+          return "Normal weight";
+        } else if (bmi >= 25 && bmi < 29.9) {
+          return "Overweight";
+        } else {
+          return "Obesity";
+        }
+      }
+    }
+
+    // 3. Event Listener for Calculate BMI Button
+    document.getElementById("calculateBMIBtn").addEventListener("click", function() {
+      // Get values from input fields
+      weight = parseFloat(document.getElementById("weight").value);
+      height = parseFloat(document.getElementById("height").value);
+
+      // Validate input values
+      if (!weight || !height || weight <= 0 || height <= 0) {
+        alert("Please enter valid weight and height values.");
+        return;
+      }
+
+      // Create BMI object and calculate BMI
+      const bmiCalculator = new BMI(weight, height);
+      const bmi = bmiCalculator.calculateBMI(); // Get BMI value
+
+      // Display the calculated BMI
+      document.getElementById("bmiResult").textContent = `Your BMI is ${bmi.toFixed(2)}`;
+
+      // Classify the BMI and display the category
+      const category = bmiCalculator.classifyBMI(bmi);
+      document.getElementById("bmiCategory").textContent = `Category: ${category}`;
+    });
+  </script>
+
+</body>
+</html>

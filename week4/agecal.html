@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .age-result {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Age Calculator</h1>
+
+  <div>
+    <label for="dob">Enter your Date of Birth: </label>
+    <input type="date" id="dob" />
+    <button id="calculateAgeBtn">Calculate Age</button>
+  </div>
+
+  <div class="age-result">
+    <h3>Your Age:</h3>
+    <p id="ageResult">Please enter your birthdate and click "Calculate Age".</p>
+  </div>
+
+  <script>
+    // 1. Variables
+    const currentDate = new Date();  // Current date
+    let birthDate, age;  // Variables to store birthdate and calculated age
+
+    // 2. AgeCalculator Class
+    class AgeCalculator {
+      constructor(birthDate) {
+        this.birthDate = new Date(birthDate);  // Convert string date to Date object
+      }
+
+      // Method to calculate age
+      calculateAge() {
+        const birthYear = this.birthDate.getFullYear();
+        const birthMonth = this.birthDate.getMonth();
+        const birthDay = this.birthDate.getDate();
+
+        // Calculate the difference in years
+        let age = currentDate.getFullYear() - birthYear;
+
+        // Adjust age if birthday hasn't occurred yet this year
+        if (currentDate.getMonth() < birthMonth || (currentDate.getMonth() === birthMonth && currentDate.getDate() < birthDay)) {
+          age--;
+        }
+
+        return age;
+      }
+    }
+
+    // 3. Event Listener for Calculate Age Button
+    document.getElementById("calculateAgeBtn").addEventListener("click", function() {
+      const dobInput = document.getElementById("dob").value;
+
+      // Validate if the user entered a valid date
+      if (dobInput) {
+        const ageCalculator = new AgeCalculator(dobInput);
+        age = ageCalculator.calculateAge();
+
+        // Display the calculated age
+        document.getElementById("ageResult").textContent = `You are ${age} years old.`;
+      } else {
+        alert("Please select a valid date of birth.");
+      }
+    });
+  </script>
+
+</body>
+</html>

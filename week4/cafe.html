@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Café Ordering System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .order-summary {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Café Ordering System</h1>
+
+  <div>
+    <h3>Choose Your Coffee</h3>
+    <button id="coffeeBtn">Order Coffee</button>
+  </div>
+
+  <div>
+    <h3>Choose Extras</h3>
+    <button id="addMilkBtn">Add Milk</button>
+    <button id="addSugarBtn">Add Sugar</button>
+  </div>
+
+  <div class="order-summary">
+    <h3>Order Summary:</h3>
+    <ul id="orderList"></ul>
+    <p><strong>Total: $<span id="totalAmount">0</span></strong></p>
+    <button id="finalizeOrderBtn">Finalize Order</button>
+  </div>
+
+  <script>
+    // 1. Variables
+    let coffeePrice = 5; // Basic coffee price
+    let milkPrice = 1; // Price for milk
+    let sugarPrice = 0.5; // Price for sugar
+    let totalAmount = 0; // Total amount of the order
+    let orderItems = []; // List of ordered items
+
+    // 2. Coffee Order Class
+    class CoffeeOrder {
+      constructor() {
+        this.coffee = "Coffee";
+        this.extras = [];
+        this.totalPrice = coffeePrice;
+      }
+
+      addMilk() {
+        this.extras.push("Milk");
+        this.totalPrice += milkPrice;
+      }
+
+      addSugar() {
+        this.extras.push("Sugar");
+        this.totalPrice += sugarPrice;
+      }
+
+      getOrderSummary() {
+        return `${this.coffee} with ${this.extras.join(", ")}`;
+      }
+
+      getTotal() {
+        return this.totalPrice;
+      }
+    }
+
+    // 3. Event Listeners for Ordering
+    let currentOrder = new CoffeeOrder();
+
+    // Order coffee button event
+    document.getElementById("coffeeBtn").addEventListener("click", function() {
+      orderItems = []; // Clear previous order items
+      currentOrder = new CoffeeOrder(); // Create a new coffee order
+      updateOrderSummary(); // Update the UI
+    });
+
+    // Add Milk button event
+    document.getElementById("addMilkBtn").addEventListener("click", function() {
+      currentOrder.addMilk();
+      updateOrderSummary(); // Update the UI after adding milk
+    });
+
+    // Add Sugar button event
+    document.getElementById("addSugarBtn").addEventListener("click", function() {
+      currentOrder.addSugar();
+      updateOrderSummary(); // Update the UI after adding sugar
+    });
+
+    // Finalize Order button event
+    document.getElementById("finalizeOrderBtn").addEventListener("click", function() {
+      alert(`Your order is complete!\n\nOrder: ${currentOrder.getOrderSummary()}\nTotal Price: $${currentOrder.getTotal()}`);
+      // Reset order after finalization
+      orderItems = [];
+      currentOrder = new CoffeeOrder();
+      updateOrderSummary(); // Reset UI
+    });
+
+    // 4. Function to Update Order Summary on the UI
+    function updateOrderSummary() {
+      const orderList = document.getElementById("orderList");
+      const totalAmountElement = document.getElementById("totalAmount");
+
+      orderList.innerHTML = ""; // Clear previous summary
+      let orderSummaryText = currentOrder.getOrderSummary();
+      let total = currentOrder.getTotal();
+
+      // Display order summary
+      let orderItem = document.createElement("li");
+      orderItem.textContent = orderSummaryText;
+      orderList.appendChild(orderItem);
+
+      // Display total amount
+      totalAmountElement.textContent = total.toFixed(2);
+    }
+
+  </script>
+
+</body>
+</html>

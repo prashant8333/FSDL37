@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking System - JavaScript Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .banking-form {
+      margin-bottom: 20px;
+    }
+    .transaction-history {
+      margin-top: 20px;
+    }
+    .transaction-item {
+      padding: 5px;
+      background-color: #f4f4f4;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Banking System</h1>
+
+  <div class="banking-form">
+    <h3>Create Account</h3>
+    <input type="text" id="accountName" placeholder="Enter Account Name">
+    <button id="createAccountBtn">Create Account</button>
+  </div>
+
+  <div class="banking-form">
+    <h3>Bank Operations</h3>
+    <input type="number" id="amount" placeholder="Enter Amount">
+    <button id="depositBtn">Deposit</button>
+    <button id="withdrawBtn">Withdraw</button>
+    <button id="checkBalanceBtn">Check Balance</button>
+  </div>
+
+  <div class="transaction-history">
+    <h3>Transaction History</h3>
+    <div id="transactionList"></div>
+  </div>
+
+  <script>
+    // 1. Variables to hold account information
+    let currentAccount = null;
+    let transactionHistory = []; // To keep track of transactions
+
+    // 2. Account Class
+    class Account {
+      constructor(name, balance = 0) {
+        this.name = name;
+        this.balance = balance;
+      }
+
+      deposit(amount) {
+        if (amount > 0) {
+          this.balance += amount;
+          this.addTransaction('Deposit', amount);
+          return true;
+        } else {
+          alert("Please enter a valid amount.");
+          return false;
+        }
+      }
+
+      withdraw(amount) {
+        if (amount <= 0) {
+          alert("Please enter a valid amount.");
+          return false;
+        } else if (amount > this.balance) {
+          alert("Insufficient balance.");
+          return false;
+        } else {
+          this.balance -= amount;
+          this.addTransaction('Withdraw', amount);
+          return true;
+        }
+      }
+
+      checkBalance() {
+        return this.balance;
+      }
+
+      addTransaction(type, amount) {
+        let date = new Date().toLocaleString();
+        transactionHistory.push({
+          type: type,
+          amount: amount,
+          balanceAfter: this.balance,
+          date: date
+        });
+        renderTransactionHistory(); // Re-render transaction history
+      }
+    }
+
+    // 3. Event Listeners for Banking Operations
+    document.getElementById("createAccountBtn").addEventListener("click", function() {
+      const accountName = document.getElementById("accountName").value.trim();
+      if (accountName) {
+        currentAccount = new Account(accountName); // Create a new account
+        alert(`Account created for ${accountName}`);
+      } else {
+        alert("Please enter a valid account name.");
+      }
+    });
+
+    document.getElementById("depositBtn").addEventListener("click", function() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (currentAccount) {
+        if (currentAccount.deposit(amount)) {
+          alert(`Deposited ${amount} successfully.`);
+        }
+      } else {
+        alert("Please create an account first.");
+      }
+    });
+
+    document.getElementById("withdrawBtn").addEventListener("click", function() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (currentAccount) {
+        if (currentAccount.withdraw(amount)) {
+          alert(`Withdrew ${amount} successfully.`);
+        }
+      } else {
+        alert("Please create an account first.");
+      }
+    });
+
+    document.getElementById("checkBalanceBtn").addEventListener("click", function() {
+      if (currentAccount) {
+        alert(`Your balance is ${currentAccount.checkBalance()}`);
+      } else {
+        alert("Please create an account first.");
+      }
+    });
+
+    // 4. Function to render transaction history
+    function renderTransactionHistory() {
+      const transactionList = document.getElementById("transactionList");
+      transactionList.innerHTML = "";  // Clear previous history
+
+      transactionHistory.forEach(transaction => {
+        const transactionItem = document.createElement("div");
+        transactionItem.classList.add("transaction-item");
+        transactionItem.textContent = `${transaction.type} of ${transaction.amount} on ${transaction.date}. Balance: ${transaction.balanceAfter}`;
+        transactionList.appendChild(transactionItem);
+      });
+    }
+
+  </script>
+
+</body>
+</html>

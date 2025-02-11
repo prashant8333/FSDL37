@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pollution Monitoring System - Mumbai</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .pollution-report {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pollution Monitoring System - Mumbai</h1>
+
+  <div>
+    <h3>Record Pollution Levels</h3>
+    <label for="areaName">Area Name: </label>
+    <input type="text" id="areaName" placeholder="Enter area name"><br><br>
+    <label for="pollutionLevel">Pollution Level (PM2.5): </label>
+    <input type="number" id="pollutionLevel" placeholder="Enter pollution level"><br><br>
+    <button id="recordPollutionBtn">Record Pollution</button>
+  </div>
+
+  <div class="pollution-report">
+    <h3>Pollution Report:</h3>
+    <ul id="pollutionReportList"></ul>
+    <p><strong>Average Pollution Level: </strong><span id="averagePollutionLevel">0</span></p>
+    <p><strong>Areas Exceeding Safety Limit: </strong><span id="areasExceedingLimit">0</span></p>
+  </div>
+
+  <script>
+    // 1. Variables
+    const safetyLimit = 100;  // The pollution level considered safe (PM2.5 level)
+    let pollutionData = [];  // Array to store pollution records
+    let totalPollutionLevel = 0;  // To calculate the average pollution level
+    let exceedingAreasCount = 0;  // To count areas exceeding the safety limit
+
+    // 2. PollutionRecord Class
+    class PollutionRecord {
+      constructor(areaName, pollutionLevel) {
+        this.areaName = areaName;
+        this.pollutionLevel = pollutionLevel;
+      }
+
+      // Method to check if the pollution level exceeds the safety limit
+      isExceedingLimit() {
+        return this.pollutionLevel > safetyLimit;
+      }
+    }
+
+    // 3. Event Listener for Recording Pollution Levels
+    document.getElementById("recordPollutionBtn").addEventListener("click", function() {
+      const areaName = document.getElementById("areaName").value.trim();
+      const pollutionLevel = parseFloat(document.getElementById("pollutionLevel").value);
+
+      // Check if the inputs are valid
+      if (areaName && !isNaN(pollutionLevel)) {
+        const newRecord = new PollutionRecord(areaName, pollutionLevel);
+        pollutionData.push(newRecord);  // Add the new record to the pollution data
+        updatePollutionReport();  // Update the pollution report
+        resetInputs();  // Clear the input fields
+      } else {
+        alert("Please enter valid area name and pollution level.");
+      }
+    });
+
+    // 4. Function to Update Pollution Report
+    function updatePollutionReport() {
+      const pollutionReportList = document.getElementById("pollutionReportList");
+      const averagePollutionLevelElement = document.getElementById("averagePollutionLevel");
+      const areasExceedingLimitElement = document.getElementById("areasExceedingLimit");
+
+      pollutionReportList.innerHTML = "";  // Clear the previous report
+      totalPollutionLevel = 0;  // Reset total pollution level
+      exceedingAreasCount = 0;  // Reset exceeding areas count
+
+      // Loop through all records to display them and calculate the total pollution level
+      pollutionData.forEach(record => {
+        const recordItem = document.createElement("li");
+        recordItem.textContent = `${record.areaName}: ${record.pollutionLevel} PM2.5`;
+        pollutionReportList.appendChild(recordItem);
+
+        totalPollutionLevel += record.pollutionLevel;  // Add to total pollution level
+
+        // Check if the area exceeds the safety limit
+        if (record.isExceedingLimit()) {
+          exceedingAreasCount++;
+        }
+      });
+
+      // Calculate and display the average pollution level
+      const averagePollution = pollutionData.length > 0 ? (totalPollutionLevel / pollutionData.length).toFixed(2) : 0;
+      averagePollutionLevelElement.textContent = averagePollution;
+
+      // Display the number of areas exceeding the safety limit
+      areasExceedingLimitElement.textContent = exceedingAreasCount;
+    }
+
+    // 5. Function to Reset Input Fields
+    function resetInputs() {
+      document.getElementById("areaName").value = "";
+      document.getElementById("pollutionLevel").value = "";
+    }
+
+  </script>
+
+</body>
+</html>
