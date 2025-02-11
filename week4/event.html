@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Event Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .event-list {
+      margin-top: 20px;
+    }
+    .event {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 5px 10px;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>College Event Management</h1>
+
+  <div>
+    <label for="eventName">Event Name:</label>
+    <input type="text" id="eventName" placeholder="Enter event name"><br><br>
+    
+    <label for="eventDate">Event Date:</label>
+    <input type="date" id="eventDate"><br><br>
+    
+    <label for="eventType">Event Type:</label>
+    <select id="eventType">
+      <option value="Sports">Sports</option>
+      <option value="Cultural">Cultural</option>
+      <option value="Educational">Educational</option>
+    </select><br><br>
+    
+    <button id="addEventBtn">Add Event</button>
+  </div>
+
+  <div>
+    <h2>Filter Events</h2>
+    <button id="showSportsBtn">Show Sports Events</button>
+    <button id="showCulturalBtn">Show Cultural Events</button>
+    <button id="showAllBtn">Show All Events</button>
+  </div>
+
+  <div class="event-list">
+    <h2>Event List:</h2>
+    <div id="eventsContainer"></div>
+  </div>
+
+  <script>
+    // Define variables for event data and UI elements
+    let events = []; // Array to store events
+    let eventNameInput = document.getElementById("eventName");
+    let eventDateInput = document.getElementById("eventDate");
+    let eventTypeInput = document.getElementById("eventType");
+    let eventsContainer = document.getElementById("eventsContainer");
+
+    // Event class to create new events
+    class Event {
+      constructor(name, date, type) {
+        this.name = name;
+        this.date = date;
+        this.type = type;
+      }
+
+      // Method to display event
+      displayEvent() {
+        let eventDiv = document.createElement("div");
+        eventDiv.classList.add("event");
+        eventDiv.innerHTML = `
+          <strong>${this.name}</strong> (${this.type})<br>
+          Date: ${this.date}
+        `;
+        return eventDiv;
+      }
+    }
+
+    // Function to add an event
+    function addEvent() {
+      let name = eventNameInput.value;
+      let date = eventDateInput.value;
+      let type = eventTypeInput.value;
+
+      if (!name || !date) {
+        alert("Please enter both event name and date.");
+        return;
+      }
+
+      let newEvent = new Event(name, date, type);
+      events.push(newEvent);
+      eventNameInput.value = '';
+      eventDateInput.value = '';
+
+      displayEvents(); // Refresh the event list
+    }
+
+    // Function to display all events
+    function displayEvents(filteredEvents = events) {
+      eventsContainer.innerHTML = ''; // Clear previous events
+      if (filteredEvents.length === 0) {
+        eventsContainer.innerHTML = '<p>No events to display.</p>';
+        return;
+      }
+      filteredEvents.forEach(event => {
+        eventsContainer.appendChild(event.displayEvent());
+      });
+    }
+
+    // Event Listeners for Buttons
+    document.getElementById("addEventBtn").addEventListener("click", addEvent);
+
+    document.getElementById("showSportsBtn").addEventListener("click", function() {
+      let sportsEvents = events.filter(event => event.type === "Sports");
+      displayEvents(sportsEvents);
+    });
+
+    document.getElementById("showCulturalBtn").addEventListener("click", function() {
+      let culturalEvents = events.filter(event => event.type === "Cultural");
+      displayEvents(culturalEvents);
+    });
+
+    document.getElementById("showAllBtn").addEventListener("click", function() {
+      displayEvents();
+    });
+  </script>
+
+</body>
+</html>

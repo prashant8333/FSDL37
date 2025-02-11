@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Pass/Fail System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .student-list {
+      margin-top: 20px;
+    }
+    .student {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 5px 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Student Pass/Fail System</h1>
+
+  <div>
+    <label for="studentName">Student Name:</label>
+    <input type="text" id="studentName" placeholder="Enter student name"><br><br>
+
+    <label for="studentRoll">Roll Number:</label>
+    <input type="text" id="studentRoll" placeholder="Enter roll number"><br><br>
+
+    <label for="studentGrade">Grade (0-100):</label>
+    <input type="number" id="studentGrade" placeholder="Enter grade"><br><br>
+
+    <button id="addStudentBtn">Add Student</button>
+  </div>
+
+  <div class="student-list">
+    <h2>Student Results:</h2>
+    <div id="studentResults"></div>
+  </div>
+
+  <script>
+    // Variables to store student data and UI elements
+    let students = [];
+    const studentNameInput = document.getElementById("studentName");
+    const studentRollInput = document.getElementById("studentRoll");
+    const studentGradeInput = document.getElementById("studentGrade");
+    const studentResults = document.getElementById("studentResults");
+
+    // Student class to create new student objects
+    class Student {
+      constructor(name, roll, grade) {
+        this.name = name;
+        this.roll = roll;
+        this.grade = grade;
+      }
+
+      // Method to determine if the student has passed or failed
+      getResult() {
+        // Pass if grade is 50 or more
+        if (this.grade >= 50) {
+          return "Pass";
+        } else {
+          return "Fail";
+        }
+      }
+
+      // Method to display student information
+      displayStudent() {
+        const studentDiv = document.createElement("div");
+        studentDiv.classList.add("student");
+        studentDiv.innerHTML = `
+          <strong>Name:</strong> ${this.name}<br>
+          <strong>Roll Number:</strong> ${this.roll}<br>
+          <strong>Grade:</strong> ${this.grade}<br>
+          <strong>Status:</strong> ${this.getResult()}
+        `;
+        return studentDiv;
+      }
+    }
+
+    // Function to add a student to the list
+    function addStudent() {
+      // Get the input values
+      const name = studentNameInput.value;
+      const roll = studentRollInput.value;
+      const grade = parseInt(studentGradeInput.value);
+
+      // Validate input values
+      if (!name || !roll || isNaN(grade) || grade < 0 || grade > 100) {
+        alert("Please enter valid student details (Name, Roll Number, and Grade).");
+        return;
+      }
+
+      // Create a new student object
+      const newStudent = new Student(name, roll, grade);
+      students.push(newStudent);
+
+      // Clear the input fields
+      studentNameInput.value = '';
+      studentRollInput.value = '';
+      studentGradeInput.value = '';
+
+      // Display all students with their pass/fail status
+      displayStudents();
+    }
+
+    // Function to display all students
+    function displayStudents() {
+      studentResults.innerHTML = ''; // Clear previous results
+      if (students.length === 0) {
+        studentResults.innerHTML = '<p>No students to display.</p>';
+        return;
+      }
+
+      // Loop through the students array and display each student
+      students.forEach(student => {
+        studentResults.appendChild(student.displayStudent());
+      });
+    }
+
+    // Event Listener for Add Student button
+    document.getElementById("addStudentBtn").addEventListener("click", addStudent);
+  </script>
+
+</body>
+</html>
