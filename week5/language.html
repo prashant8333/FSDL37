@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Difference Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Date Difference Calculator</h1>
+
+  <div>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" />
+  </div>
+
+  <div>
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" />
+  </div>
+
+  <div>
+    <label for="unit">Select Unit:</label>
+    <select id="unit">
+      <option value="days">Days</option>
+      <option value="weeks">Weeks</option>
+      <option value="months">Months</option>
+    </select>
+  </div>
+
+  <button id="calculateBtn">Calculate Difference</button>
+
+  <div id="result"></div>
+
+  <script>
+    // Function to calculate the difference between two dates
+    function calculateDateDifference(startDate, endDate, unit) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Get the time difference in milliseconds
+      const timeDiff = end - start;
+
+      // If end date is before start date, return an error
+      if (timeDiff < 0) {
+        return "End date cannot be before start date.";
+      }
+
+      let result;
+      switch (unit) {
+        case 'days':
+          result = timeDiff / (1000 * 3600 * 24); // Convert ms to days
+          break;
+        case 'weeks':
+          result = timeDiff / (1000 * 3600 * 24 * 7); // Convert ms to weeks
+          break;
+        case 'months':
+          const startMonth = start.getMonth();
+          const endMonth = end.getMonth();
+          const startYear = start.getFullYear();
+          const endYear = end.getFullYear();
+
+          result = (endYear - startYear) * 12 + (endMonth - startMonth); // Convert ms to months
+          break;
+        default:
+          result = "Invalid unit.";
+      }
+
+      return result;
+    }
+
+    // Event listener for the Calculate button
+    document.getElementById("calculateBtn").addEventListener("click", function() {
+      const startDate = document.getElementById("startDate").value;
+      const endDate = document.getElementById("endDate").value;
+      const unit = document.getElementById("unit").value;
+
+      if (!startDate || !endDate) {
+        alert("Please select both start and end dates.");
+        return;
+      }
+
+      const difference = calculateDateDifference(startDate, endDate, unit);
+
+      // Display the result
+      document.getElementById("result").innerText = `Difference: ${difference} ${unit}`;
+    });
+  </script>
+
+</body>
+</html>

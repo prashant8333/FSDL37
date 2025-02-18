@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      font-size: 36px;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      margin: 10px 0;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    input:focus, button:focus {
+      border-color: #45a049;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #weatherInfo {
+      margin-top: 20px;
+      color: #333;
+      font-size: 18px;
+      text-align: center;
+    }
+    #weatherResult {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+    .weather-item {
+      background-color: #f0f9f4;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      color: #333;
+      font-size: 18px;
+    }
+    .weather-item strong {
+      color: #4CAF50;
+    }
+    .error {
+      color: #e74c3c;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Weather App</h1>
+    <input type="text" id="city" placeholder="Enter City Name" />
+    <button id="getWeatherBtn">Get Weather</button>
+
+    <div id="weatherInfo">
+      <div id="weatherResult"></div>
+    </div>
+  </div>
+
+  <script>
+    const apiKey = 'd377bade8ce1d31dfa46975f48df092e';  // Replace with your OpenWeatherMap API Key
+
+    document.getElementById('getWeatherBtn').addEventListener('click', async function() {
+      const city = document.getElementById('city').value.trim();
+      if (!city) {
+        alert('Please enter a city name');
+        return;
+      }
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('City not found');
+        }
+
+        const data = await response.json();
+
+        // Check if weather data is available
+        if (data.main && data.weather) {
+          const weatherDescription = data.weather[0].description;
+          const temperature = data.main.temp;
+          const humidity = data.main.humidity;
+          const windSpeed = data.wind.speed;
+
+          document.getElementById('weatherResult').innerHTML = `
+            <div class="weather-item">
+              <strong>Weather:</strong> ${weatherDescription}
+            </div>
+            <div class="weather-item">
+              <strong>Temperature:</strong> ${temperature}°C
+            </div>
+            <div class="weather-item">
+              <strong>Humidity:</strong> ${humidity}%
+            </div>
+            <div class="weather-item">
+              <strong>Wind Speed:</strong> ${windSpeed} m/s
+            </div>
+          `;
+        } else {
+          document.getElementById('weatherResult').innerHTML = '<p class="error">No weather data available.</p>';
+        }
+
+      } catch (error) {
+        document.getElementById('weatherResult').innerHTML = `<p class="error">${error.message}</p>`;
+      }
+    });
+  </script>
+
+</body>
+</html>

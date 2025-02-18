@@ -3,117 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Language Translator</title>
+  <title>Countdown Timer</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
       text-align: center;
     }
-    textarea {
-      width: 100%;
+    .countdown-display {
+      font-size: 40px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    input, button {
       padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      margin: 10px;
+      font-size: 16px;
     }
     button {
-      display: block;
-      width: 100%;
-      padding: 10px;
       background-color: #4CAF50;
       color: white;
-      border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
     button:hover {
       background-color: #45a049;
     }
-    select {
-      padding: 10px;
-      width: 100%;
+    .form-container {
       margin-bottom: 20px;
-      border-radius: 5px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Language Translator</h1>
-    
-    <label for="languageSelect">Select Language to Translate:</label>
-    <select id="languageSelect">
-      <option value="en">English</option>
-      <option value="hi">Hindi</option>
-      <option value="es">Spanish</option>
-      <option value="fr">French</option>
-      <!-- You can add more languages here -->
-    </select>
+  <h1>Countdown Timer</h1>
 
-    <label for="inputText">Enter Text:</label>
-    <textarea id="inputText" rows="4" placeholder="Type your text here..."></textarea>
-    
-    <button id="translateButton">Translate</button>
+  <div class="form-container">
+    <label for="targetDate">Enter Target Date and Time:</label>
+    <input type="datetime-local" id="targetDate">
+    <button id="startTimerBtn">Start Countdown</button>
+  </div>
 
-    <h2>Translated Text:</h2>
-    <p id="translatedText">Your translated text will appear here...</p>
+  <div class="countdown-display" id="countdownDisplay">
+    Please enter a target date and time to start the countdown.
   </div>
 
   <script>
-    document.getElementById("translateButton").addEventListener("click", function() {
-      const inputText = document.getElementById("inputText").value;
-      const targetLanguage = document.getElementById("languageSelect").value;
+    let countdownInterval;
 
-      // Validate input
-      if (!inputText) {
-        alert("Please enter text to translate.");
+    // Function to start the countdown timer
+    function startCountdown() {
+      const targetDate = document.getElementById("targetDate").value;
+      const targetTime = new Date(targetDate).getTime(); // Get target date as timestamp
+
+      if (isNaN(targetTime)) {
+        alert("Please select a valid target date and time.");
         return;
       }
 
-      // Google Translate API Key (replace with your own API key)
-      const apiKey = 'YOUR_GOOGLE_API_KEY'; // Replace with your API key
-      const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+      // Stop any previous countdown interval
+      clearInterval(countdownInterval);
 
-      // Prepare the request data
-      const data = {
-        q: inputText,
-        target: targetLanguage, // The target language selected from the dropdown
-      };
+      // Update the countdown every second
+      countdownInterval = setInterval(function() {
+        const currentTime = new Date().getTime();
+        const timeLeft = targetTime - currentTime;
 
-      // Fetch request to Google Translate API
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.data && data.data.translations) {
-          const translatedText = data.data.translations[0].translatedText;
-          document.getElementById("translatedText").textContent = translatedText;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          document.getElementById("countdownDisplay").innerHTML = "The event has arrived!";
         } else {
-          alert("Translation failed. Please try again.");
+          const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+          document.getElementById("countdownDisplay").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert("An error occurred. Please try again.");
-      });
-    });
+      }, 1000);
+    }
+
+    // Event listener for the start button
+    document.getElementById("startTimerBtn").addEventListener("click", startCountdown);
   </script>
 
 </body>
