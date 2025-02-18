@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercise Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container, .summary-container {
+      margin-bottom: 20px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .workout-log {
+      margin-top: 20px;
+    }
+    .log-item {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin: 5px 0;
+    }
+    .summary-container {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Exercise Tracker</h1>
+
+  <div class="form-container">
+    <h3>Log a New Workout</h3>
+    <label for="exerciseType">Exercise Type:</label>
+    <input type="text" id="exerciseType" placeholder="Enter exercise type (e.g., Running, Cycling)" />
+
+    <label for="duration">Duration (minutes):</label>
+    <input type="number" id="duration" placeholder="Enter duration in minutes" />
+
+    <label for="caloriesBurned">Calories Burned:</label>
+    <input type="number" id="caloriesBurned" placeholder="Enter calories burned" />
+
+    <button id="logWorkoutBtn">Log Workout</button>
+  </div>
+
+  <div class="workout-log">
+    <h3>Workout Log</h3>
+    <div id="logContainer"></div>
+  </div>
+
+  <div class="summary-container">
+    <h3>Summary</h3>
+    <p>Total Workouts: <span id="totalWorkouts">0</span></p>
+    <p>Total Duration: <span id="totalDuration">0</span> minutes</p>
+    <p>Total Calories Burned: <span id="totalCalories">0</span></p>
+  </div>
+
+  <script>
+    // Initialize workout data
+    let workouts = [];
+
+    // Function to update the log container
+    function updateLog() {
+      const logContainer = document.getElementById("logContainer");
+      logContainer.innerHTML = ""; // Clear existing log entries
+
+      workouts.forEach(workout => {
+        const workoutDiv = document.createElement("div");
+        workoutDiv.classList.add("log-item");
+        workoutDiv.textContent = `${workout.type} - ${workout.duration} minutes - ${workout.calories} calories`;
+        logContainer.appendChild(workoutDiv);
+      });
+
+      // Update the summary
+      updateSummary();
+    }
+
+    // Function to update the summary
+    function updateSummary() {
+      const totalWorkouts = workouts.length;
+      const totalDuration = workouts.reduce((sum, workout) => sum + workout.duration, 0);
+      const totalCalories = workouts.reduce((sum, workout) => sum + workout.calories, 0);
+
+      document.getElementById("totalWorkouts").textContent = totalWorkouts;
+      document.getElementById("totalDuration").textContent = totalDuration;
+      document.getElementById("totalCalories").textContent = totalCalories;
+    }
+
+    // Event listener for the "Log Workout" button
+    document.getElementById("logWorkoutBtn").addEventListener("click", function() {
+      const exerciseType = document.getElementById("exerciseType").value.trim();
+      const duration = parseFloat(document.getElementById("duration").value);
+      const caloriesBurned = parseFloat(document.getElementById("caloriesBurned").value);
+
+      if (!exerciseType || isNaN(duration) || isNaN(caloriesBurned) || duration <= 0 || caloriesBurned <= 0) {
+        alert("Please enter valid data for exercise type, duration, and calories burned.");
+        return;
+      }
+
+      // Log the workout
+      workouts.push({
+        type: exerciseType,
+        duration: duration,
+        calories: caloriesBurned
+      });
+
+      // Clear input fields
+      document.getElementById("exerciseType").value = "";
+      document.getElementById("duration").value = "";
+      document.getElementById("caloriesBurned").value = "";
+
+      // Update the log and summary
+      updateLog();
+    });
+  </script>
+
+</body>
+</html>
