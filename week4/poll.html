@@ -3,117 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pollution Monitoring System - Mumbai</title>
+  <title>Feedback Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    .pollution-report {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
+    .form-container {
+      margin-bottom: 20px;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      font-size: 16px;
     }
     button {
-      padding: 5px 10px;
-      margin: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .review-container {
+      margin-top: 20px;
+    }
+    .review-item {
+      border: 1px solid #ddd;
+      margin: 5px 0;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+    .review-item h4 {
+      margin: 0;
     }
   </style>
 </head>
 <body>
 
-  <h1>Pollution Monitoring System - Mumbai</h1>
+  <h1>Feedback Form</h1>
 
-  <div>
-    <h3>Record Pollution Levels</h3>
-    <label for="areaName">Area Name: </label>
-    <input type="text" id="areaName" placeholder="Enter area name"><br><br>
-    <label for="pollutionLevel">Pollution Level (PM2.5): </label>
-    <input type="number" id="pollutionLevel" placeholder="Enter pollution level"><br><br>
-    <button id="recordPollutionBtn">Record Pollution</button>
+  <div class="form-container">
+    <h3>Leave Your Feedback</h3>
+    <label for="rating">Rating (1 to 5):</label>
+    <select id="rating">
+      <option value="1">1 - Poor</option>
+      <option value="2">2 - Fair</option>
+      <option value="3">3 - Good</option>
+      <option value="4">4 - Very Good</option>
+      <option value="5">5 - Excellent</option>
+    </select>
+
+    <label for="comments">Comments:</label>
+    <textarea id="comments" rows="4" placeholder="Leave your comments here..."></textarea>
+
+    <button id="submitFeedbackBtn">Submit Feedback</button>
   </div>
 
-  <div class="pollution-report">
-    <h3>Pollution Report:</h3>
-    <ul id="pollutionReportList"></ul>
-    <p><strong>Average Pollution Level: </strong><span id="averagePollutionLevel">0</span></p>
-    <p><strong>Areas Exceeding Safety Limit: </strong><span id="areasExceedingLimit">0</span></p>
+  <div class="review-container">
+    <h3>User Reviews</h3>
+    <div id="reviewList"></div>
   </div>
 
   <script>
-    // 1. Variables
-    const safetyLimit = 100;  // The pollution level considered safe (PM2.5 level)
-    let pollutionData = [];  // Array to store pollution records
-    let totalPollutionLevel = 0;  // To calculate the average pollution level
-    let exceedingAreasCount = 0;  // To count areas exceeding the safety limit
+    // Store feedbacks in an array
+    let feedbacks = [];
 
-    // 2. PollutionRecord Class
-    class PollutionRecord {
-      constructor(areaName, pollutionLevel) {
-        this.areaName = areaName;
-        this.pollutionLevel = pollutionLevel;
-      }
+    // Function to update the displayed reviews
+    function updateReviews() {
+      const reviewList = document.getElementById("reviewList");
+      reviewList.innerHTML = "";  // Clear the review list
 
-      // Method to check if the pollution level exceeds the safety limit
-      isExceedingLimit() {
-        return this.pollutionLevel > safetyLimit;
-      }
+      feedbacks.forEach(feedback => {
+        const reviewDiv = document.createElement("div");
+        reviewDiv.classList.add("review-item");
+
+        const rating = "★".repeat(feedback.rating) + "☆".repeat(5 - feedback.rating); // Rating stars
+
+        reviewDiv.innerHTML = `
+          <h4>Rating: ${rating}</h4>
+          <p><strong>Comments:</strong> ${feedback.comments}</p>
+        `;
+        
+        reviewList.appendChild(reviewDiv);
+      });
     }
 
-    // 3. Event Listener for Recording Pollution Levels
-    document.getElementById("recordPollutionBtn").addEventListener("click", function() {
-      const areaName = document.getElementById("areaName").value.trim();
-      const pollutionLevel = parseFloat(document.getElementById("pollutionLevel").value);
+    // Event listener for submit button
+    document.getElementById("submitFeedbackBtn").addEventListener("click", function() {
+      const rating = parseInt(document.getElementById("rating").value);
+      const comments = document.getElementById("comments").value.trim();
 
-      // Check if the inputs are valid
-      if (areaName && !isNaN(pollutionLevel)) {
-        const newRecord = new PollutionRecord(areaName, pollutionLevel);
-        pollutionData.push(newRecord);  // Add the new record to the pollution data
-        updatePollutionReport();  // Update the pollution report
-        resetInputs();  // Clear the input fields
-      } else {
-        alert("Please enter valid area name and pollution level.");
+      // Validate inputs
+      if (!comments) {
+        alert("Please provide your comments.");
+        return;
       }
-    });
 
-    // 4. Function to Update Pollution Report
-    function updatePollutionReport() {
-      const pollutionReportList = document.getElementById("pollutionReportList");
-      const averagePollutionLevelElement = document.getElementById("averagePollutionLevel");
-      const areasExceedingLimitElement = document.getElementById("areasExceedingLimit");
-
-      pollutionReportList.innerHTML = "";  // Clear the previous report
-      totalPollutionLevel = 0;  // Reset total pollution level
-      exceedingAreasCount = 0;  // Reset exceeding areas count
-
-      // Loop through all records to display them and calculate the total pollution level
-      pollutionData.forEach(record => {
-        const recordItem = document.createElement("li");
-        recordItem.textContent = `${record.areaName}: ${record.pollutionLevel} PM2.5`;
-        pollutionReportList.appendChild(recordItem);
-
-        totalPollutionLevel += record.pollutionLevel;  // Add to total pollution level
-
-        // Check if the area exceeds the safety limit
-        if (record.isExceedingLimit()) {
-          exceedingAreasCount++;
-        }
+      // Store the feedback
+      feedbacks.push({
+        rating: rating,
+        comments: comments
       });
 
-      // Calculate and display the average pollution level
-      const averagePollution = pollutionData.length > 0 ? (totalPollutionLevel / pollutionData.length).toFixed(2) : 0;
-      averagePollutionLevelElement.textContent = averagePollution;
+      // Clear the form
+      document.getElementById("rating").value = "5";  // Default to excellent rating
+      document.getElementById("comments").value = "";
 
-      // Display the number of areas exceeding the safety limit
-      areasExceedingLimitElement.textContent = exceedingAreasCount;
-    }
-
-    // 5. Function to Reset Input Fields
-    function resetInputs() {
-      document.getElementById("areaName").value = "";
-      document.getElementById("pollutionLevel").value = "";
-    }
-
+      // Update the reviews display
+      updateReviews();
+    });
   </script>
 
 </body>
