@@ -52,7 +52,7 @@
 
     // 2. Account Class
     class Account {
-      constructor(name, balance = 0) {
+      constructor(name, balance = 10000) {  // Set default balance to 10000
         this.name = name;
         this.balance = balance;
       }
@@ -102,8 +102,8 @@
     document.getElementById("createAccountBtn").addEventListener("click", function() {
       const accountName = document.getElementById("accountName").value.trim();
       if (accountName) {
-        currentAccount = new Account(accountName); // Create a new account
-        alert(`Account created for ${accountName}`);
+        currentAccount = new Account(accountName); // Create a new account with default balance 10000
+        alert(`Account created for ${accountName} with an initial balance of 10000.`);
       } else {
         alert("Please enter a valid account name.");
       }
