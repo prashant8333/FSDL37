@@ -14,17 +14,22 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-image: url('https://source.unsplash.com/1600x900/?sky,clouds'); /* Default Sky Image */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
     h1 {
       text-align: center;
       color: #4CAF50;
       font-size: 36px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
     }
     .container {
       max-width: 600px;
       width: 100%;
       padding: 30px;
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
@@ -78,6 +83,15 @@
       color: #e74c3c;
       font-size: 18px;
     }
+    #weatherImage {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -89,6 +103,7 @@
 
     <div id="weatherInfo">
       <div id="weatherResult"></div>
+      <img id="weatherImage" src="" alt="Weather Image" style="display: none;" />
     </div>
   </div>
 
@@ -118,6 +133,7 @@
           const temperature = data.main.temp;
           const humidity = data.main.humidity;
           const windSpeed = data.wind.speed;
+          const icon = data.weather[0].icon;
 
           document.getElementById('weatherResult').innerHTML = `
             <div class="weather-item">
@@ -133,6 +149,12 @@
               <strong>Wind Speed:</strong> ${windSpeed} m/s
             </div>
           `;
+
+          // Update background image based on weather conditions
+          const weatherIconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
+          document.getElementById('weatherImage').src = weatherIconUrl;
+          document.getElementById('weatherImage').style.display = 'block';
+
         } else {
           document.getElementById('weatherResult').innerHTML = '<p class="error">No weather data available.</p>';
         }
